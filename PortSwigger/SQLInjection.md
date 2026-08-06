@@ -223,7 +223,7 @@ select version()
 
 On peut essayer de caler ça dans une injection histoire de voir le moteur SGBD à l'aide d'une union. Il faut bien penser à la concordance des types.
 
-Plusieurs DBs (sauf Oracle évidemment, mais il me semble que y'a d'autres méthodes) contiennent une vue `information_schema.tables` sous la forme
+Plusieurs DBs (Oracle nécessite d'autres méthodes évidemment) contiennent une vue `information_schema.tables` sous la forme
 ```sql
 table information_schema.tables(
 	table_catalog varchar not null, -- DV
@@ -245,7 +245,12 @@ table information_schema.columns(
 ```
 Il faut évidemment contraindre le nom de table souhaité !
 
-Oracle utilise d'autres tables, notamment `all_users`, en se basant sur qui à créé quoi.
+Oracle utilise d'autres tables, notamment :
+- `all_users`
+- `all_tables`
+- `all_tab_columns`
+- ...
+Faut se renseigner sur le schéma de ces tables qui ressembles à `information_schema`.
 # Injections SQL à l'aveugle (blind SQLi)
 
 Ces injections correspondent à des attaques SQLi ne mettant pas en évidence une quelconque réponse reçue du SGBD : on ne voit pas l'effet que l'injection au eu immédiatement.
