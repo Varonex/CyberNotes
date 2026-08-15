@@ -1,3 +1,4 @@
+*Ce fichier compile le premier cours de PortSwigger ayant des informations substantielles non exhaustives.*
 # Traversée des répertoires
 
 Lorsqu'un serveur demande une ressource (image, ...), il va passer par une URI.

@@ -29,7 +29,7 @@ Il est possible de bypasser le tronquage en doublant et échappant des caractèr
 
 Certaines fois, comme par exemple pour les formulaires en mode `multipart/form-data`, le système peut stripper les chemins avant d'envoyer le contenu à l'application. Dans ce cas, il est possible d'url-encoder `../` une voire deux fois, donnant `%2e%2e%2f` une fois, `%252e%252e%252f` deux fois. Les séquences `..%c0%af` et `..%ef%bc%8f` peuvet également marcher. Dans la solution du lab, on utilise `..%252f` comme flag de remplacement.
 
-Parfois, inclure le chemin de base peut être utile. On peut donc passer le chemin complet depuis la source : `/var/www/images/../../../etc/passwd`. Il faut savoir que la source est `/var/www/images` évidemment.
+Parfois, inclure le chemin de base peut être utile si l'application vérifie que le début du chemin matche. On peut donc passer le chemin complet depuis la source : `/var/www/images/../../../etc/passwd` avec la source étant `/var/www/images` évidemment.
 
 Enfin, la dernière technique consiste à donner une extension de fichier. Évidemment, faire ceci bloquerait la bonne interprétation du fichier. Mais pour rappel, les strings en C se terminant par `\0`, on peut introduire un tel caractère avant l'extension, ralliant la présence d'une extension lors de la vérification métier à l'absence de parsing lors de l'inteprétation du chemin. On obtient `../../../etc/passwd%00.png` !
 # Comment régler le problème

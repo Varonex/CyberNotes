@@ -15,7 +15,7 @@ Le XSS peut se dérouler sous différentes approches fondamentales. On note les 
 - Self-XSS : on provoque la victime à s'infecter elle-même.
 - XSS réfléchi : dès que le serveur web reçoit une requête HTTP, il retranscrit le payload dans le HTML retourné.
 - XSS stocké : dès que le script malveillant est stocké en DB.
-- XSS depuis le DOM : la vulnérabilité existe dans la page HTML directement, et aucun requêtage web n'est nécessaire pour la prouver (`innerHTML`, ...).
+- XSS depuis le DOM : la vulnérabilité existe dans la page HTML directement, et aucun requêtage web n'est nécessaire pour la prouver (`innerHTML`, `document.cookie`, ...).
 ### XSS Réfléchi
 
 Le XSS réfléchi se fait dès que le serveur web donne la réponse à une requête donnée.
@@ -71,4 +71,49 @@ Les XSS stockés peuvent se trouver dans :
 
 Dans l'ensemble, comme pour le XSS réfléchi, on peut envoyer une série de nombres aléatoires et voir s'ils apparaissent sur la page, et tester la persistance.
 La persistance peut être à durée limitée. Par exemple un système de suggestions de recherches pourrait être vulnérable, mais à une durée limitée.
+### XSS depuis le DOM
+
+Le XSS depuis le DOM se déroule dès que le javascript de la page client va exécuter du code unsafe. Il ne s'agit pas d'un serveur qui aurait rendu la page web avec une balise script malicieuse (comme un serveur php duquel un script est injecté), il s'agit bien d'une insertion au niveau **local** : le client directement provoque l'interprétation de code js malicieux.
+#### Exécuter un XSS depuis le DOM
+
+On peut par exemple via l'usage de :
+```js
+eval(...); // Comme loadstring() en lua
+document.getElementById("hi").innerHTML = ...; // Load des éléments malicieux
+window.location = ...; // Envoyer sur une page malicieuse
+document.write(...);
+```
+Toutes les méthodes d'évaluation unsafe de javascript vont devenir un vecteur XSS.
+
+On peut aussi imaginer un XSS depuis l'url, notamment avec les pages 404, qui lorsqu'elles sont localement rendues, peuvent être amenées à *automatiquement* mettre le nom de la page invalide via un code javascript, sans l'intermédiaire d'un serveur.
+#### Tester la présence d'un XSS depuis le DOM
+
+*Les tests de XSS depuis le DOM pouvant se faire intégralement localement, des outils existent pour scanner une page web agressivement dès la réception de son contenu.*
+
+- On compte divers manières qui consistent à essayer de détecter si des éléments entrés apparaissent sur la page. Par exemple, on peut introduire `localtion.search` dans la page html puis recherche sur la page. Si url-encodage il y a, il y a des chances pour que ça ne marche pas.
+> `location.search` est une variable js pour obtenir les variables GET de l'url. Par exemple
+```js
+// Sur url "https://www.url.com?a=1&b=2"
+console.log(location.search);
+// Met "?a=1&b=2"
+```
+Par exemple, si j'ai une page qui fait
+```html
+<!-- url = "https://www.url.com?s=hi" -->
+<img src="url.com?img=hi"/>
+```
+On peut tester l'url `"/><svg onload="alert(1)"/>` pour provoquer
+```js
+<img src="url.com?img="/><svg onload="alert(1)"/>
+```
+et provoquer une alert.
+
+On peut aussi avoir ça comme trigger
+```js
+<img src="<nonexistent" onerror="alert(1)"/>
+```
+
+- Pour détecter des portes d'entrée dans le code javascript directement, c'est toujours plus compliqué. Il y a pas mal de techniques qui consistent à utiliser le debugger et/ou faire de la recherche de string sur la page.
+- Usage de DOM-invader (des programmes autonomes vérifiant la présence d'XSS depuis le DOM)
+#### Exploit de l'XSS depuis le DOM
 
