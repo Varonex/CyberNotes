@@ -29,6 +29,7 @@ Fiche : https://portswigger.net/web-security/sql-injection/cheat-sheet
 | Commentaire   | `--comm`              | `--comm`<br>`/*comm*/`   | `--comm`<br>`/*comm*/`   | `#comm`<br>`-- comm` (attention espace)<br>`/*comm*/`     |
 | Concaténation | 'a' \|\| 'b'          | `'a' + 'b'`              | 'a' \|\| 'b'             | `'a' 'b'`<br>(attention espace)<br><br>`concat('a', 'b')` |
 | Substring     | `substr('abc', 1, 1)` | `substring('abc', 1, 1)` | `substring('abc', 1, 1)` | `substring('abc', 1, 1)`                                  |
+> Toujours utiliser `-- ` **avec** l'espace.
 
 | Type de donnée                    | Oracle                                                                    | MSSQL                                   | PgSQL                          | MySQL                                                      |
 | --------------------------------- | ------------------------------------------------------------------------- | --------------------------------------- | ------------------------------ | ---------------------------------------------------------- |
