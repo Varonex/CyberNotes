@@ -98,12 +98,25 @@ select * from users where name = '' union select 'stringtest', null--' and passw
 
 > **But** : obtenir métadonnées du SGBD.
 
-| Métadonnée           | Oracle                                                                   | MSSQL                                                           | PgSQL                                                           | MySQL                                                           |
-| -------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| Version              | select banner<br>from v\$version;<br>select version<br>from v\$instance; | select @@version;                                               | select version();                                               | select @@version;                                               |
-| Listing des tables   | select \* from all_tables;                                               | select \* from information_schema.tables;                       | select \* from information_schema.tables;                       | select \* from information_schema.tables;                       |
-| Listing des colonnes | select * from all_tab_columns where table_name = '';                     | select * from information_schema.columns where table_name = ''; | select * from information_schema.columns where table_name = ''; | select * from information_schema.columns where table_name = ''; |
+| Métadonnée           | Oracle                                                                                       | MSSQL                                                                                                                         | PgSQL                                                                                                                         | MySQL                                                                                                                         |
+| -------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Version              | select banner<br>from v\$version;<br>select version<br>from v\$instance;                     | select @@version;                                                                                                             | select version();                                                                                                             | select @@version;                                                                                                             |
+| Listing des tables   | select owner, table_name, tablespace_name from all_tables;<br><br>                           | select table_catalog, table_schema, table_name, table_type from information_schema.tables;                                    | select table_catalog, table_schema, table_name, table_type from information_schema.tables;                                    | select table_catalog, table_schema, table_name, table_type from information_schema.tables;                                    |
+| Listing des colonnes | select owner, table_name, column_name, data_type from all_tab_columns where table_name = ''; | select table_catalog, table_schema, table_name, column_name, data_type from information_schema.columns where table_name = ''; | select table_catalog, table_schema, table_name, column_name, data_type from information_schema.columns where table_name = ''; | select table_catalog, table_schema, table_name, column_name, data_type from information_schema.columns where table_name = ''; |
+- Oracle :
+    - `owner` : utilisateur propriétaire.
+    - `tablespace_name` : stockage physique.
+    - `table_name` : Nom table en majuscules.
+    - `column_name` : Nom colonne en majuscules.
+    - `data_type` : Type de donnée colonne.
 
+- Autre :
+	- `table_catalog` : DB d'appartenance.
+	- `table_schema` : Namespace.
+	- `table_name` : Nom table.
+	- `table_type` : Table de base ou vue.
+	- `column_name` : Nom colonne.
+	- `data_type` : Type de donnée colonne.
 ### Compter les colonnes retournées
 #### Par order by
 
