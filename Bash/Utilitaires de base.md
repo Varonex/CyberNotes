@@ -43,6 +43,7 @@
 Traitement de plusieurs fichiers et division de chaque ligne en colonnes selon un séparateur.
 - `-F` : changer le séparateur.
 - `-f` : lire le code awk depuis un fichier.
+- `-v` : injecter une variable (`-v var=val)`.
 
 ```bash
 awk -F ";" '
@@ -67,6 +68,9 @@ awk -F ";" '
 	{
 		# $0 = toute la ligne.
 		print $0
+		
+		# Affiche $0.
+		print
 		
 		# $i = ième elm. On peut indexer via littéralement $i (boucle pour etc...)
 		print $1
@@ -112,7 +116,11 @@ awk -F ";" '
 	}
 	
 	# Code lu si le premier élément suit le regex. Bloc conditionnel.
-	$1 ~ /aeiouy/ {}
+	$1 ~ /aeiouy/
+	{
+		# Skip la ligne.
+		next
+	}
 	
 	# Bloc lu à la fin.
 	END
