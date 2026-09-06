@@ -12,10 +12,16 @@
 - `>&2` : Redirection STDOUT dans STDERR.
 - `>>` : Redirection sans écrasement préalable du flux.
 - `<` : Apport d'un fichier.
-- `<< EOL ... EOL` : Heredoc.
+- `<< EOL ... EOL` : Heredoc. `EOL` est arbitraire.
 - `<< 'EOL' ... EOL` : Heredoc sans interprétation des variables.
 - `<<<` : Herestring. Équivalent à `echo ... |`.
 - `--` : Fin interprétation des arguments.
+- `!n` : Exécute la n-ième commande issue de l'historique.
+- `!-n` : Exécute la n-ième commande en partant de la fin.
+- `!chaine` : Exécute la dernière commande correspondant à `chaine`.
+- `!!` : Exécute la dernière commande.
+- `!?chaine` : Exécute la dernière commande qui contient `chaine` dans l'invocation.
+- `!$` : Récupère le dernier argument de la commande exécutée avant.
 # Manipulation d'un flux
 ## Lecture du flux
 | Commande | Description                                                        | Options                                                                         | Descriptions Options                                                                                                                                                             |
@@ -222,6 +228,11 @@ awk -F ";" '
 | `id [u]`     | Donne les informations sur un user.                                         | `-g`<br>`-G`<br>`-n(.)`<br>`-r`<br>`-u`                                                      | -Groupe principal.<br>-Tous les groupes.<br>-Nom associé à l'option désirée.<br>-Donne l'ID réel et non pas<br>l'effectif.<br>-User.                                                                                 |
 | `su`         | Change d'utilisateur.                                                       | `-c [c]`<br>`-g [i]`<br>`-G [i]`<br>`-, -l`<br>`-p`<br>`-w [v]`                              | -Commande unitaire à exécuter.<br>-Groupe primaire à cibler.<br>-Groupe secondaire à cibler.<br>-Login.<br>-Préserve les variables<br>d'envrionnement.<br>-Préserve la liste des variables<br>d'environnement.       |
 | `sudo`       | Obtient les privilèges admin le<br>temps d'exécution d'une<br>commande.     | `-A`<br>`-b`<br>`-e`<br>`-E`<br>`-g [i]`<br>`-H`<br>`-l`<br>`-p [p]`<br>`-s [s]`<br>`-u [u]` | -Prompt le mdp.<br>-Envoie le proc. en tâche de<br>fond.<br>-Mode édition de fichier.<br>-Préserve l'environnement.<br>-GID/Groupname.<br>-Homedir.<br>-Liste les sudoers.<br>-Mdp.<br>-Shell.<br>-UID/Username.<br> |
-# Misc
-type, which, whereis, ...
-history \[-c], `!`, clear, ...
+# Miscellaneous
+| Commande      | Description                                                                                           | Options                                                          | Descriptions Options                                                                                                                                                                             |
+| ------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `clear`       | Supprime le contenu du terminal.                                                                      |                                                                  |                                                                                                                                                                                                  |
+| `history`     | Donne l'historique des commandes<br>lancées associé à un numéro utilisable<br>avec `!` pour la rerun. | `-c`<br>`-d [p]`                                                 | -Supprime l'historique.<br>-Supprime les entrées à<br>la position précisée (ou dans<br>l'intervalle précisé).                                                                                    |
+| `type [c]`    | Donne les informations sur la<br>commande tapée.                                                      |                                                                  |                                                                                                                                                                                                  |
+| `which [c]`   | Donne la localisation d'une commande.                                                                 |                                                                  |                                                                                                                                                                                                  |
+| `whereis [c]` | Donne les localisations associées à la<br>commande.<br>                                               | `-b`<br>`-B [d]`<br>`-f`<br>`-m`<br>`-M [d]`<br>`-s`<br>`-S [d]` | -Fichiers binaires.<br>-Dossiers pour fichiers<br>binaires.<br>-Fin de liste de dossiers.<br>-Entrées du manuel.<br>-Dossiers pour entrées du<br>manuel.<br>-Sources.<br>-Dossiers pour sources. |
