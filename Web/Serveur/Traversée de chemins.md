@@ -1,3 +1,5 @@
+> [!CAUTION] Avis d'usage
+> Cette page regroupe des techniques d'attaque actives, enfreignant ainsi la loi Godfrain 1988, pouvant mener à des poursuites pénales si utilisées contre un STAD non autorisé préalablement.
 # Introduction
 
 La traversée de chemins consiste à manipuler les chemins de fichiers pour naviguer sur le système de fichiers du serveur distant.

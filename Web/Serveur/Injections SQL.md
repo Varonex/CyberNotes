@@ -1,3 +1,5 @@
+> [!CAUTION] Avis d'usage
+> Cette page regroupe des techniques d'attaque actives, enfreignant ainsi la loi Godfrain 1988, pouvant mener à des poursuites pénales si utilisées contre un STAD non autorisé préalablement.
 # Introduction
 
 Les injections SQL consistent à détourner la payload traditionnelle d'SQL pour y injecter du code SQL. On liste différents SGBD qui auront chacun sa syntaxe.

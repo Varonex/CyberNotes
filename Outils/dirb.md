@@ -1,0 +1,2 @@
+> [!CAUTION] Avis d'usage
+> Cette page regroupe des techniques d'attaque actives, enfreignant ainsi la loi Godfrain 1988, pouvant mener à des poursuites pénales si utilisées contre un STAD non autorisé préalablement.
