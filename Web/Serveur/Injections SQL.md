@@ -32,6 +32,7 @@ Fiche : https://portswigger.net/web-security/sql-injection/cheat-sheet
 | Substring     | `substr('abc', 1, 1)` | `substring('abc', 1, 1)` | `substring('abc', 1, 1)`        | `substring('abc', 1, 1)`                                  |
 | Ascii         | `ascii(x)`            | `ascii(x)`               | `ascii(x)`                      | `ascii(x)`<br>`ord(x)`                                    |
 | Length        | `length(x)`           | `len(x)`                 | `length(x)`<br>`char_length(x)` | `length(x)`<br>`char_length(x)`                           |
+> [!TIP] Astuce
 > Toujours utiliser `-- ` **avec** l'espace.
 
 | Type de donnée                    | Oracle                                                                    | MSSQL                                   | PgSQL                          | MySQL                                                      |
@@ -42,6 +43,7 @@ Fiche : https://portswigger.net/web-security/sql-injection/cheat-sheet
 | dates                             | `date`<br>`timestamp`                                                     | `date`<br>`datetime`                    | `date`<br>`timestamp`          | `date`<br>`datetime`                                       |
 | booléens                          | Aucun                                                                     | `bit`                                   | `boolean`                      | `boolean`<br>`tinyint(1)`                                  |
 | Casting                           | `to_char(x)`<br>`to_number(x)` (int et float)<br>`to_date(x, format)`<br> | `cast(x as TYPE)`<br>`convert(TYPE, x)` | `cast(x as TYPE)`<br>`x::TYPE` | `cast(x as TYPE)`<br>`str_to_date(x)` (dates from strings) |
+> [!TIP] Astuce
 > MySQL : utiliser `char` pour strings et `signed`/`unsigned` pour int **lors d'un cast**.
 ## Points d'entrée
 

@@ -16,6 +16,7 @@ En manipulant le chemin pour le traverser
 <img src="/images?path=../../../etc/passwd"/>
 <!-- Forme /var/www/images/../../../etc/passwd résolu en /etc/passwd -->
 ```
+> [!NOTE] Information
 > `/` pour unix/bsd
 > `\` et `/` pour Windows
 # Techniques de traversée
