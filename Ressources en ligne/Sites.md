@@ -1,5 +1,6 @@
 > [!CAUTION]
 > Certaines ressources présentées effectueront des actions passives, ce qui n'enfreint pas la loi. Cependant, d'autres sont plutôt actives, enfreignant ainsi la loi Godfrain 1988, pouvant mener à des poursuites pénales si utilisées contre un STAD non autorisé préalablement.
+> Il est de votre responsabilité de déterminer si une ressource est autorisée ou non. Cette page ne liste pas cette information.
 
 # Anonymité
 | Nom du site   | Description du site                                      | Lien                           |
