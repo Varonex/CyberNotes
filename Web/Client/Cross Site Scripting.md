@@ -20,6 +20,6 @@ Le XSS consiste à exécuter du javascript arbitraire sur le navigateur d'une vi
 
 Si on tape `<img src=x onerror='alert()'/>`, une alerte apparaîtra car la balise sera interprétée.
 
-- **XSS réfléchi** : manipulation d'entrées pour que le serveur injecte le code arbitraire (url, formulaire, ...).
+- **XSS réfléchi** : manipulation d'entrées pour que le serveur injecte le code arbitraire (url, formulaire, ...). Passe probablement par un WAF.
 - **XSS stocké** : stockage du code malveillant & interprétation pour quiconque visite la page infectée (pseudo, formulaire, ...).
-- **XSS DOM** : manipulation d'entrées uniquement sur le client, sans intervention du serveur hôte.
+- **XSS DOM** : manipulation d'entrées uniquement sur le client, sans intervention du serveur hôte. Seul la vérification client permet d'éviter l'attaque.
