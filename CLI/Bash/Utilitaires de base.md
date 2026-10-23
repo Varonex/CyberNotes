@@ -23,7 +23,9 @@
 - `!chaine` : Exécute la dernière commande correspondant à `chaine`.
 - `!!` : Exécute la dernière commande.
 - `!?chaine` : Exécute la dernière commande qui contient `chaine` dans l'invocation.
-- `!$` : Récupère le dernier argument de la commande exécutée avant.
+- `!$` : Récupère le dernier argument de la commande exécutée avant. Pareil que `$_`.
+- `$$` : PID du processus actuel.
+- `$-` : Options actives de la shell.
 # Manipulation d'un flux
 ## Lecture du flux
 | Commande | Description                                                        | Options                                                                         | Descriptions Options                                                                                                                                                             |
