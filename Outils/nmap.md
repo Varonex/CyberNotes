@@ -59,6 +59,7 @@ Tous les ports par défaut.
 
 | Option                  | Utilité                    |
 | ----------------------- | -------------------------- |
+| `--badsum`              | Envoie des paquets bugués. |
 | `-f [v]`<br>`--mtu [v]` | Fragmentation des paquets. |
 | `-S [IP]`               | IP spoofing.               |
 | `--ttl [v]`             | Fixe le Time-To-Live.      |
