@@ -3,24 +3,31 @@
 > Il est de votre responsabilité de déterminer si une ressource est autorisée ou non. Cette page ne liste pas cette information.
 
 # Anonymité
+
 | Nom du site   | Description du site                                      | Lien                           |
 | ------------- | -------------------------------------------------------- | ------------------------------ |
 | SimpleLogin   | Forwardeur de messagerie<br>(par proxy).                 | https://simplelogin.io         |
 | GuerrillaMail | Mail temporaire qui permet<br>aussi d'envoyer des mails. | https://www.guerrillamail.com  |
 | TempMail      | Mail temporaire en readonly.                             | https://temp-mail.org/fr       |
 | Tor           | Navigateur.                                              | https://www.torproject.org/fr/ |
+
 # Exploits
+
 | Nom du site | Description du site | Lien                       |
 | ----------- | ------------------- | -------------------------- |
 | Exploit DB  | Liste des exploits. | https://www.exploit-db.com |
+
 # Leaks
+
 | Nom du site    | Description du site                   | Lien                       |
 | -------------- | ------------------------------------- | -------------------------- |
 | DeHashed       | DB de contenus déhachés.              | https://dehashed.com       |
 | HaveIBeenPwned | Recherche de leaks par adresse mail.  | https://haveibeenpwned.com |
 | Intelx         | Répertorie des leaks.                 | https://intelx.io          |
 | LeakCheck      | Recherche les leaks par adresse mail. | https://leakcheck.io       |
+
 # OSINT
+
 | Nom du site     | Description du site                                  | Lien                                                          |
 | --------------- | ---------------------------------------------------- | ------------------------------------------------------------- |
 | Archive         | Archive web.                                         | https://web.archive.org                                       |
@@ -45,7 +52,9 @@
 | WhatsMyName     | Recherche par username.                              | https://whatsmyname.app                                       |
 | Wigle           | Reconnaissance wifi.                                 | https://wigle.net                                             |
 | Zoomeye         | Recherche d'endpoints via des filtres. Axé IoT.      | https://www.zoomeye.ai                                        |
+
 # Vulnérabilités
+
 | Nom du site    | Description du site                               | Lien                                                         |
 | -------------- | ------------------------------------------------- | ------------------------------------------------------------ |
 | AlientVault    | Plateforme de CTI.                                | https://otx.alienvault.com                                   |

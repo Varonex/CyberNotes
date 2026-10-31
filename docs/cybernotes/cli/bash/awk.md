@@ -120,6 +120,7 @@ awk -F ";" '
 	}
 ' ...fichiers
 ```
+
 > [!WARNING]
 > Attention, indexes de strings à 1.
 
