@@ -1,0 +1,94 @@
+﻿# Configuration de mkdocs pour la génération de pages.
+site_name: CyberNotes
+site_url: https://Varonex.github.io/cyber-notes/
+site_description: Cybersecurity-related notes I made over time.
+site_author: Varonex
+
+theme:
+    name: material
+    language: en
+    copyright: "CyberNotes &copy; 2026 by Varonex is licensed under CC BY-NC-SA 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/4.0/"
+
+  # Couleurs.
+    palette:
+        # Thème clair.
+        - media: "(prefer-color-scheme: light)"
+          scheme: default
+          primary: red
+          accent: red
+          toggle:
+            icon: material/brightness-7
+            name: Switch to dark theme
+
+        - media: "(prefer-color-scheme: dark)"
+          scheme: slate
+          primary: red
+          accent: red
+          toggle:
+            icon: material/brightness-4
+            name: Switch to light theme
+
+  # Contenu du site.
+    features:
+        - navigation.indexes
+        - navigation.top
+        - content.code.copy
+        - content.code.select
+        - content.code.annotate
+
+# Markdown additionnel.
+markdown_extensions:
+    - pymdownx.highlight:
+        anchor_linenums: true
+        line_spans: __span
+        pygments_lang_class: true
+
+    - pymdownx.inlinehilite
+    - pymdownx.snippets
+    - pymdownx.superfences:
+        custom_fences:
+            - name: mermaid
+              class: mermaid
+              format: !!python/name:pymdownx.superfences.def_mermaid_format
+
+    - admonition
+    - pymdownx.details
+
+    - pymdownx.tabbed:
+          alternate_style: true
+
+    - pymdownx.emoji:
+        emoji_index: !!python/name:material.extensions.emoji.twemoji
+        emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+
+# Liaison CSS.
+extra_css:
+    - css/style.css
+
+# Liaison JS.
+extra_javascript:
+    - js/app.js
+
+# Enlève les marques du générateur.
+extra:
+    generator: false
+
+nav:
+    - Home: index.md
+    - CyberNotes:
+        - Introduction: cybernotes/index.md
+        - CLI:
+              - Bash:
+                    - AWK: cybernotes/cli/bash/awk.md
+                    - Basics: cybernotes/cli/bash/basics.md
+                    - Networking: cybernotes/cli/bash/networking.md
+                    - Scripting: cybernotes/cli/bash/scripting.md
+        - Pentest:
+              - Web:
+                    - Client:
+                          - "Cross Site Scripting (XSS)": cybernotes/pentest/web/client/xss.md
+                    - Server:
+                          - "Path Traversal": cybernotes/pentest/web/server/path-traversal.md
+                          - "SQL Injections (SQLi)": cybernotes/pentest/web/server/sqli.md
+

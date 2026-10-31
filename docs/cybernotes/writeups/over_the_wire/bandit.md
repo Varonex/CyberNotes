@@ -419,7 +419,7 @@ On liste les tags via `git tag` et on consulte la valeur d'un tag via `git show 
 `git tag` donne "secret", et `git show secret` donne le mdp.
 ## Niveau 31 -> 32
 
-Le but est de push un fichier nommé `key.txt`. `key.txt` est dans le `.gitignore`.
+Le but est de push un fichier nommé `key.txt`. `key.txt` est dans le `../../../../.gitignore`.
 On fait
 ```bash
 echo "May I come in?" > key.txt
