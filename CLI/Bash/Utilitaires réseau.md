@@ -38,15 +38,22 @@
 | `curl [u]` | Utilitaire couteau suisse pour<br>lancer des requêtes HTTP(S).<br>Gère aussi d'autres protocoles<br>comme SMTP. |         |                      |
 | `wget [u]` | Web-get, permet de faire du<br>HTTP(S) vers des urls, mais<br>aussi du SFTP.                                    |         |                      |
 # SSH
-| Commande       | Description                                                                                                                                     | Options | Descriptions Options |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- | -------------------- |
-| `scp [u]`      | Protocole SCP basé sur SSH<br>pour le transfert de fichiers<br>orienté CLI (utile pour les<br>scripts).                                         |         |                      |
-| `sftp [u]`     | Protocole SFTP basé sur FTP<br>passant sur SSH pour le<br>transfert de fichiers orienté<br>instructions (utile pour<br>l'usage humain et GUIs). |         |                      |
-| `ssh [u]`      | Protocole SSH héritant de<br>TELNET permettant la<br>connexion à distance.                                                                      |         |                      |
-| `ssh-copy-key` |                                                                                                                                                 |         |                      |
-| `ssh-keygen`   | Utilitaire pour générer des<br>couples (pub, priv) de clés<br>SSH.                                                                              |         |                      |
+| Commande          | Description                                                                                                                                     | Options | Descriptions Options |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- | -------------------- |
+| `scp [u]`         | Protocole SCP basé sur SSH<br>pour le transfert de fichiers<br>orienté CLI (utile pour les<br>scripts).                                         |         |                      |
+| `sftp [u]`        | Protocole SFTP basé sur FTP<br>passant sur SSH pour le<br>transfert de fichiers orienté<br>instructions (utile pour<br>l'usage humain et GUIs). |         |                      |
+| `ssh [u]`         | Protocole SSH héritant de<br>TELNET permettant la<br>connexion à distance.                                                                      |         |                      |
+| `ssh-add`         |                                                                                                                                                 |         |                      |
+| `ssh-agent`       |                                                                                                                                                 |         |                      |
+| `ssh-copy-id [u]` |                                                                                                                                                 |         |                      |
+| `ssh-keygen`      | Utilitaire pour générer des<br>couples (pub, priv) de clés<br>SSH.                                                                              |         |                      |
+| `ssh-keyscan [s]` |                                                                                                                                                 |         |                      |
 # Firewall
-| Commande   | Description | Options | Descriptions Options |
-| ---------- | ----------- | ------- | -------------------- |
-| `iptables` |             |         |                      |
-| `ufw`      |             |         |                      |
+| Commande    | Description | Options | Descriptions Options |
+| ----------- | ----------- | ------- | -------------------- |
+| `arptables` |             |         |                      |
+| `ebtables`  |             |         |                      |
+| `iptables`  |             |         |                      |
+| `ip6tables` |             |         |                      |
+| `nftables`  |             |         |                      |
+| `ufw`       |             |         |                      |

@@ -1,2 +1,14 @@
-.obsidian
-.trash
+# Fichiers IDE/autres logiciels
+.idea/
+.vscode/
+.vs/
+.obsidian/
+.vault/
+.trash/
+
+# Zensical
+site/
+
+# MAC
+.DS_Store
+
