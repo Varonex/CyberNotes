@@ -120,7 +120,7 @@ awk -F ";" '
 	}
 ' ...fichiers
 ```
-> [!WARNING] Indexe des strings
+> [!WARNING]
 > Attention, indexes de strings à 1.
 
 - `length(x)` : Longueur d'un string.
