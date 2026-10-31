@@ -75,8 +75,8 @@ extra:
     generator: false
 
 nav:
-    - Home: index.md
     - CyberNotes:
+        - index.md
         - Introduction: cybernotes/index.md
         - CLI:
               - Bash:
