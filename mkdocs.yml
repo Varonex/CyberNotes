@@ -53,6 +53,7 @@ markdown_extensions:
 
     - admonition
     - pymdownx.details
+    - pymdownx.blocks.admonition
 
     - pymdownx.tabbed:
           alternate_style: true
